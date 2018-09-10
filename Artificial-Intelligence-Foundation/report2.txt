@@ -1,0 +1,74 @@
+# argument example
+# queue: ((C A S) (D A S)) or ((nil))
+# route: (F E C A S) <linear list>
+# element: A
+# next: (A C) <neighbor nodes>
+
+(setf(get 's 'neighbors) '(a d)
+     (get 'a 'neighbors) '(s b d)
+     (get 'b 'neighbors) '(a c e)
+     (get 'c 'neighbors) '(b)
+     (get 'd 'neighbors) '(s a e)
+     (get 'e 'neighbors) '(b d f)
+     (get 'f 'neighbors) '(e)
+)
+
+
+(defun my-append (list1 list2)
+    (cond ((null list1) list2)
+          (t (cons (car list1) (my-append (cdr list1) list2)))
+    )
+)
+
+(defun removecycle (element next)
+    (cond ((null next) nil)
+          ((eq element (car next)) (removecycle element (cdr next)))
+          (t (cons (car next) (removecycle element (cdr next))))
+    )
+)
+
+(defun my-remove (next route)
+    (cond ((null route) next)
+          (t (my-remove (removecycle (car route) next) (cdr route)))
+    )
+)
+
+(defun extend2 (next route)
+    (cond ((null next) nil)
+          (t (cons (cons (car next) route) (extend2 (cdr next) route)))
+    )
+)
+
+(defun extend (route)
+    (extend2 (my-remove (get (car route) 'neighbors) route) route)
+)
+
+(defun completep (route)
+    (eq (car route) 'f)
+)
+
+(defun my-search (start finish queue)
+    (cond ((null queue) nil)
+          ((completep (car queue)) (car queue))
+          (t (my-search start finish (my-append (extend (car queue)) (cdr queue))))
+    )
+)
+
+-----------------
+
+* (my-search 'S 'F '((S)))
+  0: (MY-SEARCH S F ((S)))
+    1: (MY-SEARCH S F ((A S) (D S)))
+      2: (MY-SEARCH S F ((B A S) (D A S) (D S)))
+        3: (MY-SEARCH S F ((C B A S) (E B A S) (D A S) (D S)))
+          4: (MY-SEARCH S F ((E B A S) (D A S) (D S)))
+            5: (MY-SEARCH S F ((D E B A S) (F E B A S) (D A S) (D S)))
+              6: (MY-SEARCH S F ((F E B A S) (D A S) (D S)))
+              6: MY-SEARCH returned (F E B A S)
+            5: MY-SEARCH returned (F E B A S)
+          4: MY-SEARCH returned (F E B A S)
+        3: MY-SEARCH returned (F E B A S)
+      2: MY-SEARCH returned (F E B A S)
+    1: MY-SEARCH returned (F E B A S)
+  0: MY-SEARCH returned (F E B A S)
+(F E B A S)

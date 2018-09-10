@@ -1,0 +1,14 @@
+(defun my-equal (a b)
+  (cond
+    ((atom a) (cond
+                ((atom b) (eq a b))
+                (t nil)
+              )
+    )
+    (t (cond 
+         ((my-equal (car a) (car b)) (my-equal (cdr a) (cdr b)))
+         (t nil)
+       )
+    )
+  )
+)
