@@ -1,5 +1,11 @@
 # Graph-Theory-and-Network
-出題資料より抜粋
+実行環境: Linux
+
+使用言語: C
+
+bin+resourceフォルダ内の課題番号ファイルでコマンドラインより実行できます。
+
+以下、出題資料より抜粋
 
 ## 課題1-1-1
 graph1.txt にて表現される無向グラフに対し，2 次元配列adjacent[N_MAX][N_MAX]を利用して隣
