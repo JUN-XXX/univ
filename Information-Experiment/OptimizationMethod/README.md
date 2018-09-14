@@ -6,3 +6,6 @@
 
 完全列挙、NearestAddition法、NearestNeighbor法を実装
 
+レポートにて作成した図は以下
+
+![overview image](./graph.png)
